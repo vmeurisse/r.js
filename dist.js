@@ -17,6 +17,7 @@
 
 
 var fs = require('fs'),
+    path = require('path'),
     child_process = require('child_process'),
     contents = fs.readFileSync('build/jslib/x.js', 'utf8'),
     loadRegExp = /\/\/INSERT ([\w\/\.]+)/g,
@@ -96,5 +97,6 @@ contents = contents.replace(loadRegExp, function (match, fileName) {
     }
 });
 
+if (!(fs.existsSync || path.existsSync)('bin')) fs.mkdirSync('bin')
 //Set the isOpto flag to true
-fs.writeFileSync('r.js', contents, 'utf8');
+fs.writeFileSync('bin/r.js', contents, 'utf8');
