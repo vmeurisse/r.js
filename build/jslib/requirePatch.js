@@ -160,6 +160,15 @@ function (file,           pragma,   parse,   lang,   logger,   commonJs) {
                         //Adjust the URL if it was not transformed to use baseUrl.
                         url = normalizeUrlWithBase(context, moduleName, url);
 
+                        // Allow a custom url resolver in the config
+                        if (!exists(url) && context.config.resolve) {
+                            var originalName = context.registry[moduleName] &&
+                                context.registry[moduleName].map.originalName;
+                            var contextMap = context.registry[moduleName].map;
+                            var url = context.config.resolve(originalName, file.absPath(contextMap.parentMap.url));
+                            contextMap.url = url;
+                        }
+
                         //Save the module name to path  and path to module name mappings.
                         layer.buildPathMap[moduleName] = url;
                         layer.buildFileToModule[url] = moduleName;
